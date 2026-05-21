@@ -1,0 +1,15 @@
+PORT=4000
+NODE_ENV=development
+FRONTEND_URL=http://localhost:3000
+DATABASE_URL=postgresql://postgres:password@localhost:5432/omnifind
+REDIS_URL=redis://localhost:6379
+CLERK_SECRET_KEY=sk_test_YOUR_KEY_HERE
+STRIPE_SECRET_KEY=sk_test_YOUR_KEY_HERE
+STRIPE_WEBHOOK_SECRET=whsec_YOUR_SECRET_HERE
+MEILISEARCH_HOST=http://localhost:7700
+MEILISEARCH_KEY=masterKey
+R2_ACCOUNT_ID=your_account_id
+R2_ACCESS_KEY_ID=your_access_key
+R2_SECRET_ACCESS_KEY=your_secret_key
+R2_BUCKET=omnifind-images
+R2_PUBLIC_URL=your_public_r2_url
