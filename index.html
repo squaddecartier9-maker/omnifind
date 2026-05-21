@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>OmniFind — Find anything, from everywhere</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#080808;color:#fff}
+nav{display:flex;align-items:center;justify-content:space-between;padding:16px 32px;border-bottom:1px solid #151515;position:sticky;top:0;background:#080808;z-index:100}
+.logo{font-size:18px;font-weight:600;letter-spacing:-0.03em}.logo span{color:#5DCAA5}
+.nav-links{display:flex;gap:4px}
+.nav-link{padding:7px 14px;border-radius:20px;font-size:13px;color:#555;cursor:pointer;text-decoration:none;transition:all .15s}
+.nav-link:hover,.nav-link.active{background:#151515;color:#fff}
+.btn-cta{background:#5DCAA5;color:#04342C;font-size:13px;font-weight:600;padding:8px 18px;border-radius:8px;border:none;cursor:pointer;transition:background .15s;text-decoration:none}
+.btn-cta:hover{background:#9FE1CB}
+.hero{padding:72px 32px 48px;text-align:center;max-width:900px;margin:0 auto}
+.badge{display:inline-flex;align-items:center;gap:8px;background:#0d0d0d;border:1px solid #1e1e1e;border-radius:20px;padding:6px 16px;font-size:11px;color:#5DCAA5;margin-bottom:28px;letter-spacing:.06em;text-transform:uppercase}
+.dot{width:6px;height:6px;border-radius:50%;background:#5DCAA5;animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.2}}
+h1{font-size:56px;font-weight:600;line-height:1.02;letter-spacing:-.04em;margin-bottom:16px}
+h1 .accent{color:#5DCAA5}
+.hero-sub{font-size:17px;color:#444;line-height:1.7;max-width:440px;margin:0 auto 40px}
+.search-wrap{max-width:580px;margin:0 auto 20px;background:#0d0d0d;border:1px solid #1e1e1e;border-radius:14px;overflow:hidden}
+.search-top{display:flex;align-items:center;gap:10px;padding:14px 18px}
+.search-icon{color:#444;font-size:18px}
+.search-input{flex:1;background:transparent;border:none;outline:none;font-size:15px;color:#ccc}
+.search-input::placeholder{color:#333}
+.search-btn{background:#1D9E75;color:#fff;border:none;border-radius:8px;padding:7px 16px;font-size:12px;cursor:pointer}
+.search-cats{display:flex;gap:6px;padding:0 14px 12px;flex-wrap:wrap}
+.cat{background:transparent;border:1px solid #222;border-radius:20px;padding:5px 13px;font-size:11px;color:#555;cursor:pointer;transition:all .15s}
+.cat:hover,.cat.on{background:#0F6E56;border-color:#0F6E56;color:#E1F5EE}
+.results{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;max-width:860px;margin:0 auto 40px;padding:0 32px}
+.card{background:#0d0d0d;border:1px solid #161616;border-radius:10px;padding:16px;cursor:pointer;transition:border-color .2s}
+.card:hover{border-color:#2a2a2a}
+.card-store{font-size:10px;color:#333;text-transform:uppercase;letter-spacing:.05em;margin-bottom:8px}
+.card-name{font-size:13px;color:#aaa;font-weight:500;line-height:1.35;margin-bottom:10px}
+.card-bottom{display:flex;align-items:flex-end;justify-content:space-between}
+.card-price{font-size:20px;font-weight:600;color:#fff}
+.card-del{font-size:10px;color:#333;margin-top:3px}
+.card-tag{background:#042C20;color:#5DCAA5;font-size:9px;padding:3px 8px;border-radius:4px;border:1px solid #0F6E56;letter-spacing:.04em}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);max-width:860px;margin:0 32px 48px;border:1px solid #151515;border-radius:12px;overflow:hidden}
+.stat{padding:20px;text-align:center;border-right:1px solid #151515}
+.stat:last-child{border-right:none}
+.stat-n{font-size:24px;font-weight:600;color:#fff;letter-spacing:-.02em}
+.stat-l{font-size:10px;color:#333;text-transform:uppercase;letter-spacing:.05em;margin-top:4px}
+.cta-row{display:flex;gap:12px;justify-content:center;padding:0 32px 56px}
+.btn-big{display:inline-flex;align-items:center;gap:8px;background:#5DCAA5;color:#04342C;font-size:15px;font-weight:600;padding:14px 28px;border-radius:10px;border:none;cursor:pointer;transition:background .15s;text-decoration:none}
+.btn-big:hover{background:#9FE1CB}
+.btn-outline{background:transparent;border:1px solid #222;border-radius:10px;color:#555;font-size:14px;padding:13px 22px;cursor:pointer;transition:all .15s}
+.btn-outline:hover{border-color:#444;color:#aaa}
+.white{background:#fff;color:#111}
+.section{padding:64px 32px;max-width:1000px;margin:0 auto}
+.eyebrow{font-size:11px;font-weight:600;color:#1D9E75;letter-spacing:.08em;text-transform:uppercase;margin-bottom:8px}
+.sec-h{font-size:32px;font-weight:600;color:#111;letter-spacing:-.025em;margin-bottom:6px}
+.sec-sub{font-size:15px;color:#666;margin-bottom:32px;line-height:1.6}
+.steps{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:56px}
+.step{background:#f7f7f5;border:1px solid #eee;border-radius:12px;padding:24px}
+.step-n{font-size:11px;font-weight:600;color:#1D9E75;letter-spacing:.06em;text-transform:uppercase;margin-bottom:14px}
+.step-title{font-size:16px;font-weight:600;color:#111;margin-bottom:8px}
+.step-body{font-size:13px;color:#666;line-height:1.6}
+.plans{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:56px}
+.plan{border:1px solid #e8e8e4;border-radius:12px;padding:24px;background:#fff}
+.plan.featured{border:2px solid #1D9E75}
+.plan-badge{display:inline-block;background:#E1F5EE;color:#0F6E56;font-size:10px;padding:3px 10px;border-radius:20px;margin-bottom:10px;font-weight:600}
+.plan-name{font-size:12px;color:#888;text-transform:uppercase;letter-spacing:.05em;margin-bottom:4px}
+.plan-price{font-size:40px;font-weight:600;color:#111;letter-spacing:-.03em;line-height:1}
+.plan-per{font-size:12px;color:#aaa;margin-bottom:18px}
+.plan-f{display:flex;align-items:center;gap:8px;font-size:13px;color:#555;padding:8px 0;border-top:1px solid #f0f0ee}
+.plan-f .ck{color:#1D9E75;font-weight:600}
+.viral{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-bottom:56px}
+.vcard{background:#f7f7f5;border:1px solid #eee;border-radius:12px;padding:20px}
+.vcard-title{font-size:14px;font-weight:600;color:#111;margin-bottom:6px}
+.vcard-body{font-size:13px;color:#777;line-height:1.5}
+.footer{background:#080808;padding:64px 32px;text-align:center}
+.footer-h{font-size:42px;font-weight:600;color:#fff;letter-spacing:-.03em;margin-bottom:10px}
+.footer-sub{font-size:15px;color:#444;margin-bottom:32px}
+.footer-note{font-size:12px;color:#333;margin-top:16px}
+.typed{color:#5DCAA5;font-size:13px;font-family:monospace;height:24px;text-align:center;margin-bottom:8px}
+.counter{font-size:24px;font-weight:600;color:#fff;letter-spacing:-.02em}
+@media(max-width:768px){
+  h1{font-size:36px}
+  .results,.stats{grid-template-columns:1fr}
+  .steps,.plans,.viral{grid-template-columns:1fr}
+  nav .nav-links{display:none}
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="logo">Omni<span>Find</span></div>
+  <div class="nav-links">
+    <a class="nav-link active" href="#">Home</a>
+    <a class="nav-link" href="#how">How it works</a>
+    <a class="nav-link" href="#pricing">Pricing</a>
+    <a class="nav-link" href="#sell">Sell</a>
+  </div>
+  <a href="#sell" class="btn-cta">Start free →</a>
+</nav>
+
+<div class="hero">
+  <div class="badge"><div class="dot"></div> 2,847 stores live · Beta</div>
+  <h1>Find anything.<br>From <span class="accent">everywhere.</span></h1>
+  <p class="hero-sub">One search across every store. The best price, the fastest delivery — shown side by side, instantly.</p>
+  <div class="typed" id="typed"></div>
+</div>
+
+<div style="max-width:580px;margin:0 auto 20px;padding:0 32px">
+  <div class="search-wrap">
+    <div class="search-top">
+      <span class="search-icon">🔍</span>
+      <input class="search-input" id="search-input" placeholder="Search any product in the world..." onkeydown="if(event.key==='Enter')doSearch()">
+      <button class="search-btn" onclick="doSearch()">Search</button>
+    </div>
+    <div class="search-cats" id="cats">
+      <div class="cat on" onclick="filterCat(this,'all')">All</div>
+      <div class="cat" onclick="filterCat(this,'tech')">Tech</div>
+      <div class="cat" onclick="filterCat(this,'fashion')">Fashion</div>
+      <div class="cat" onclick="filterCat(this,'food')">Food</div>
+      <div class="cat" onclick="filterCat(this,'home')">Home</div>
+      <div class="cat" onclick="filterCat(this,'sport')">Sport</div>
+    </div>
+  </div>
+</div>
+
+<div class="results" id="results">
+  <div class="card"><div class="card-store">TechShop EU</div><div class="card-name">Aluminium laptop stand pro</div><div class="card-bottom"><div><div class="card-price">€89</div><div class="card-del">2-day delivery · Free</div></div><div class="card-tag">Best price</div></div></div>
+  <div class="card"><div class="card-store">MerinoWorld</div><div class="card-name">Merino wool jacket slim fit</div><div class="card-bottom"><div><div class="card-price">€124</div><div class="card-del">Free delivery</div></div></div></div>
+  <div class="card"><div class="card-store">CoffeeCraft</div><div class="card-name">Ethiopia Yirgacheffe 250g specialty</div><div class="card-bottom"><div><div class="card-price">€18</div><div class="card-del">Roasted 3 days ago</div></div><div class="card-tag">Exclusive</div></div></div>
+</div>
+
+<div class="stats" style="margin:0 auto 48px;max-width:860px">
+  <div class="stat"><div class="counter" id="counter">2,847</div><div class="stat-l">Active stores</div></div>
+  <div class="stat"><div class="stat-n">1.2M</div><div class="stat-l">Products indexed</div></div>
+  <div class="stat"><div class="stat-n">0.3s</div><div class="stat-l">Search time</div></div>
+  <div class="stat"><div class="stat-n">€0</div><div class="stat-l">To get started</div></div>
+</div>
+
+<div class="cta-row">
+  <a href="#sell" class="btn-big">🚀 Open your store — it's free</a>
+  <button class="btn-outline" onclick="document.getElementById('how').scrollIntoView({behavior:'smooth'})">See how it works</button>
+</div>
+
+<div class="white">
+  <div class="section" id="how">
+    <div class="eyebrow">How it works</div>
+    <div class="sec-h">Simpler than anything.</div>
+    <div class="sec-sub">No tutorials. No config hell. You're live in under 10 minutes.</div>
+    <div class="steps">
+      <div class="step"><div class="step-n">Step 01</div><div class="step-title">Search once</div><div class="step-body">Type what you want. OmniFind searches every partner store simultaneously across Europe and beyond.</div></div>
+      <div class="step"><div class="step-n">Step 02</div><div class="step-title">Compare instantly</div><div class="step-body">Price, delivery, stock and reviews all on one screen. No tabs, no jumping between sites.</div></div>
+      <div class="step"><div class="step-n">Step 03</div><div class="step-title">Buy in one click</div><div class="step-body">One cart, one payment. We handle the rest so you can get back to living your life.</div></div>
+    </div>
+    <div class="eyebrow" id="pricing">Pricing</div>
+    <div class="sec-h">Start free. Stay free.</div>
+    <div class="sec-sub">No credit card. No transaction fees. Ever.</div>
+    <div class="plans">
+      <div class="plan">
+        <div class="plan-name">Starter</div>
+        <div class="plan-price">€0</div>
+        <div class="plan-per">free forever</div>
+        <div class="plan-f"><span class="ck">✓</span> 1 store</div>
+        <div class="plan-f"><span class="ck">✓</span> 100 products</div>
+        <div class="plan-f"><span class="ck">✓</span> Universal search</div>
+        <div class="plan-f"><span class="ck">✓</span> 0% transaction fees</div>
+      </div>
+      <div class="plan featured">
+        <div class="plan-badge">Most popular</div>
+        <div class="plan-name">Growth</div>
+        <div class="plan-price">€19</div>
+        <div class="plan-per">per month</div>
+        <div class="plan-f"><span class="ck">✓</span> 5 stores</div>
+        <div class="plan-f"><span class="ck">✓</span> Unlimited products</div>
+        <div class="plan-f"><span class="ck">✓</span> Advanced analytics</div>
+        <div class="plan-f"><span class="ck">✓</span> Referral system</div>
+        <div class="plan-f"><span class="ck">✓</span> Priority support</div>
+      </div>
+      <div class="plan">
+        <div class="plan-name">Enterprise</div>
+        <div class="plan-price">€59</div>
+        <div class="plan-per">per month</div>
+        <div class="plan-f"><span class="ck">✓</span> Unlimited stores</div>
+        <div class="plan-f"><span class="ck">✓</span> API access</div>
+        <div class="plan-f"><span class="ck">✓</span> White-label option</div>
+        <div class="plan-f"><span class="ck">✓</span> Dedicated manager</div>
+        <div class="plan-f"><span class="ck">✓</span> Custom integrations</div>
+      </div>
+    </div>
+    <div class="eyebrow" id="sell">Growth engine</div>
+    <div class="sec-h">It spreads itself.</div>
+    <div class="sec-sub">Every feature is built to bring you more buyers without spending on ads.</div>
+    <div class="viral">
+      <div class="vcard"><div class="vcard-title">🔗 Your own store URL</div><div class="vcard-body">omnifind.io/yourstore — one link to share on TikTok, Instagram, or anywhere your audience is.</div></div>
+      <div class="vcard"><div class="vcard-title">👥 Built-in referral system</div><div class="vcard-body">Buyers earn discounts when they bring friends. Viral growth by design, not by accident.</div></div>
+      <div class="vcard"><div class="vcard-title">📈 Live product rankings</div><div class="vcard-body">A public real-time leaderboard. Sellers compete for top spot — organic traffic for everyone.</div></div>
+      <div class="vcard"><div class="vcard-title">⚡ Free embed widget</div><div class="vcard-body">One line of code adds "Also on OmniFind" to any existing site. The network grows itself.</div></div>
+    </div>
+  </div>
+</div>
+
+<div class="footer">
+  <div class="footer-h">Ready to get started?</div>
+  <div class="footer-sub">Join thousands of sellers already on OmniFind.</div>
+  <a href="mailto:hello@omnifind.io" class="btn-big">🚀 Contact us to start</a>
+  <div class="footer-note">No credit card · Free plan available · Cancel anytime</div>
+  <div style="margin-top:40px;color:#222;font-size:12px">© 2026 OmniFind. All rights reserved.</div>
+</div>
+
+<script>
+const queries=['wireless headphones under €100','nike air max size 42','ethiopian specialty coffee','electric standing desk','mechanical keyboard TKL'];
+let qi=0,ti=0,iv;
+function type(){
+  clearInterval(iv);
+  const q=queries[qi%queries.length];
+  ti=0;
+  const el=document.getElementById('typed');
+  iv=setInterval(()=>{
+    if(ti<q.length){el.textContent=q.slice(0,++ti)+'|';}
+    else{clearInterval(iv);setTimeout(()=>{qi++;type();},2400);}
+  },55);
+}
+type();
+
+let cnt=2847;
+setInterval(()=>{
+  cnt+=Math.floor(Math.random()*2+1);
+  const el=document.getElementById('counter');
+  if(el)el.textContent=cnt.toLocaleString();
+},3200);
+
+const allCards=[
+  {s:'TechShop EU',n:'Aluminium laptop stand pro',p:'€89',d:'2-day delivery · Free',t:'Best price',cat:'tech'},
+  {s:'MerinoWorld',n:'Merino wool jacket slim fit',p:'€124',d:'Free delivery',t:null,cat:'fashion'},
+  {s:'CoffeeCraft',n:'Ethiopia Yirgacheffe 250g specialty',p:'€18',d:'Roasted 3 days ago',t:'Exclusive',cat:'food'},
+  {s:'SportZone',n:'Adidas Samba OG size 42',p:'€110',d:'Only 3 pairs left',t:'Trending',cat:'sport'},
+  {s:'HomeHaven',n:'LED desk lamp dimmable',p:'€45',d:'Free delivery',t:'New',cat:'home'},
+  {s:'TechShop EU',n:'Bosch F026 oil filter',p:'€12',d:'Fits 230+ models',t:null,cat:'tech'},
+];
+
+function filterCat(el,cat){
+  document.querySelectorAll('.cat').forEach(c=>c.classList.remove('on'));
+  el.classList.add('on');
+  const show=(cat==='all'?allCards:allCards.filter(c=>c.cat===cat)).slice(0,3);
+  document.getElementById('results').innerHTML=show.map(c=>`
+    <div class="card">
+      <div class="card-store">${c.s}</div>
+      <div class="card-name">${c.n}</div>
+      <div class="card-bottom">
+        <div><div class="card-price">${c.p}</div><div class="card-del">${c.d}</div></div>
+        ${c.t?`<div class="card-tag">${c.t}</div>`:''}
+      </div>
+    </div>`).join('');
+}
+
+function doSearch(){
+  const q=document.getElementById('search-input').value.toLowerCase();
+  if(!q)return;
+  const filtered=allCards.filter(c=>c.n.toLowerCase().includes(q)||c.s.toLowerCase().includes(q));
+  const show=filtered.length?filtered:allCards;
+  document.getElementById('results').innerHTML=show.slice(0,3).map(c=>`
+    <div class="card">
+      <div class="card-store">${c.s}</div>
+      <div class="card-name">${c.n}</div>
+      <div class="card-bottom">
+        <div><div class="card-price">${c.p}</div><div class="card-del">${c.d}</div></div>
+        ${c.t?`<div class="card-tag">${c.t}</div>`:''}
+      </div>
+    </div>`).join('');
+}
+</script>
+</body>
+</html>
